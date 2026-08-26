@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy 5th Birthday Superhero! | Level 5 Galactic Headquarters</title>
+  
+  <!-- Google Fonts: Superhero & Friendly Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Chakra+Petch:wght@500;700&family=Fredoka:wght@400;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/superhero-comic.css">
+  
+  <style>
+    /* Memory Match Game Specific CSS */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-width: 450px;
+      margin: 20px auto;
+    }
+    @media (max-width: 480px) {
+      .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .memory-card {
+      height: 90px;
+      perspective: 800px;
+      cursor: pointer;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .memory-card.flipped .card-inner,
+    .memory-card.matched .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-back, .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      border: 3px solid #000;
+      box-shadow: 0 4px 0 #000;
+      font-size: 36px;
+    }
+    .card-back {
+      background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+      color: #FDE047;
+    }
+    .card-face {
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      transform: rotateY(180deg);
+    }
+    .memory-card.matched .card-face {
+      background: linear-gradient(135deg, #10B981, #059669);
+      animation: pulse-glow 1s infinite alternate;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(6, 9, 19, 0.9);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #1E293B;
+      border: 4px solid #F59E0B;
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 16px 0 #000, 0 0 35px rgba(245, 158, 11, 0.4);
+      text-align: center;
+    }
+    .modal-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #0F172A;
+      border: 2px solid #3B82F6;
+      border-radius: 12px;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 16px;
+      margin: 10px 0 16px;
+      outline: none;
+    }
+    .modal-input:focus {
+      border-color: #FDE047;
+      box-shadow: 0 0 12px rgba(253, 224, 71, 0.5);
+    }
+  </style>
+</head>
+<body class="comic-halftone">
+
+  <!-- 3D Three.js WebGL Universe Canvas -->
+  <div id="webgl-canvas-container"></div>
+
+  <!-- Main Application Container -->
+  <div class="app-container">
+    
+    <!-- Top Header Bar -->
+    <header class="header-bar">
+      <div class="logo-badge">
+        <div class="logo-icon">5</div>
+        <div class="logo-text">
+          <h1>SUPERHERO HQ</h1>
+          <span>★ LEVEL 5 BIRTHDAY MISSION ★</span>
+        </div>
+      </div>
+      <div class="quick-actions">
+        <button id="quick-confetti-btn" class="hero-btn btn-gold" title="Blast Confetti!">🎉 Blast Confetti</button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="tab-home">🦸‍♂️ Hero Home</button>
+      <button class="tab-btn" data-tab="tab-cake">🎂 3D Birthday Cake</button>
+      <button class="tab-btn" data-tab="tab-card">💌 3D Greeting Card</button>
+      <button class="tab-btn" data-tab="tab-photos">📸 Hero Photo Collage</button>
+      <button class="tab-btn" data-tab="tab-games">🎮 Superhero Games</button>
+      <button class="tab-btn" data-tab="tab-hq">⚡ Superhero HQ</button>
+    </nav>
+
+    <!-- TAB 1: HERO HOME -->
+    <section id="tab-home" class="tab-content active">
+      <div class="hero-card hero-banner">
+        <div class="comic-badge-5">⚡ HAPPY 5TH BIRTHDAY! ⚡</div>
+        <h2 class="hero-main-title">
+          WELCOME TO YOUR <br>
+          <span class="gradient-text">SUPERHERO HEADQUARTERS</span>
+        </h2>
+        <p class="hero-subtitle">
+          Calling all Avengers, Justice Heroes, and Galactic Champions! Today, our favorite curious superhero turns <strong>5 YEARS OLD</strong>! Prepare for high-flying 3D missions, delicious cake, memory photos, and heroic fun!
+        </p>
+        
+        <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:25px;">
+          <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-primary" style="font-size:18px; padding:14px 28px;">🎂 Blow 5 Candles</button>
+          <button onclick="document.querySelector('[data-tab=tab-photos]').click()" class="hero-btn btn-gold" style="font-size:18px; padding:14px 28px;">📸 Photo Collage</button>
+          <button onclick="document.querySelector('[data-tab=tab-games]').click()" class="hero-btn btn-accent" style="font-size:18px; padding:14px 28px;">🎮 Play Mini-Games</button>
+          <button onclick="document.querySelector('[data-tab=tab-card]').click()" class="hero-btn btn-purple" style="font-size:18px; padding:14px 28px;">💌 Open 3D Card</button>
+        </div>
+
+        <!-- Super Hero Stats Grid -->
+        <div class="hero-stats-row">
+          <div class="stat-box">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Hero Level (Years Old)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Curiosity Power</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Energy & Smiles</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">#1</div>
+            <div class="stat-label">Galactic Champion</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Highlights Grid -->
+      <div class="game-card-grid">
+        <div class="game-card">
+          <div>
+            <div class="game-icon-large">🎂</div>
+            <h3 style="font-family:var(--font-hero); font-size:20px; color:#FDE047;">Interactive 3D Cake</h3>
+            <p style="color:#CBD5E1; margin:10px 0;">Click or blow out all 5 glowing candles to unlock live sparklers, fireworks, and the fanfare!</p>
+          </div>
+          <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-gold" style="margin-top:14px;">Go to Cake ➔</button>
+        </div>
+
+        <div class="game-card">
+          <div>
+            <div class="game-icon-large">📸</div>
+            <h3 style="font-family:var(--font-hero); font-size:20px; color:#38BDF8;">Hero Photo Collage</h3>
+            <p style="color:#CBD5E1; margin:10px 0;">Upload and display memory photos of the birthday boy in superhero polaroid frames!</p>
+          </div>
+          <button onclick="document.querySelector('[data-tab=tab-photos]').click()" class="hero-btn btn-primary" style="margin-top:14px;">View Collage ➔</button>
+        </div>
+
+        <div class="game-card">
+          <div>
+            <div class="game-icon-large">👾</div>
+            <h3 style="font-family:var(--font-hero); font-size:20px; color:#F43F5E;">3 Fun Mini-Games</h3>
+            <p style="color:#CBD5E1; margin:10px 0;">Pop floating villains, catch birthday treats, and match hero badges for hero points!</p>
+          </div>
+          <button onclick="document.querySelector('[data-tab=tab-games]').click()" class="hero-btn btn-accent" style="margin-top:14px;">Play Games ➔</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: 3D BIRTHDAY CAKE -->
+    <section id="tab-cake" class="tab-content">
+      <div class="hero-card cake-stage">
+        <div class="card-title-badge">🎂 SUPERHERO CAKE CEREMONY</div>
+        <h2 style="font-family:var(--font-hero); font-size:28px; text-align:center; margin-bottom:8px;">
+          BLOW OUT THE <span style="color:#FDE047;">5 CANDLES!</span>
+        </h2>
+        <p id="wish-status-banner" style="color:#94A3B8; font-weight:600; text-align:center; margin-bottom:20px; font-size:18px;">
+          ✨ Click on each candle flame to blow it out, or press the button below! ✨
+        </p>
+
+        <!-- 3D Styled Cake Assembly -->
+        <div class="cake-container">
+          <!-- Active Topper -->
+          <div id="active-cake-topper" style="font-size:44px; margin-bottom:-10px; z-index:15; animation:hero-hover 2s infinite ease-in-out;">⚡</div>
+          
+          <!-- 5 Candles -->
+          <div class="candles-row">
+            <div class="candle" id="candle-1">
+              <div class="flame"></div>
+              <div class="smoke-puff"></div>
+              <div class="candle-stick"></div>
+            </div>
+            <div class="candle" id="candle-2">
+              <div class="flame"></div>
+              <div class="smoke-puff"></div>
+              <div class="candle-stick" style="height:65px;"></div>
+            </div>
+            <div class="candle" id="candle-3">
+              <div class="flame"></div>
+              <div class="smoke-puff"></div>
+              <div class="candle-stick" style="height:70px; background:repeating-linear-gradient(45deg, #3B82F6, #3B82F6 8px, #FDE047 8px, #FDE047 16px);"></div>
+            </div>
+            <div class="candle" id="candle-4">
+              <div class="flame"></div>
+              <div class="smoke-puff"></div>
+              <div class="candle-stick" style="height:65px;"></div>
+            </div>
+            <div class="candle" id="candle-5">
+              <div class="flame"></div>
+              <div class="smoke-puff"></div>
+              <div class="candle-stick"></div>
+            </div>
+          </div>
+
+          <!-- Tier Top -->
+          <div class="cake-tier tier-top">
+            <div class="cake-frosting"></div>
+            <span style="font-family:var(--font-hero); font-size:16px; color:#fff;">⭐ LEVEL 5 ⭐</span>
+          </div>
+
+          <!-- Tier Middle -->
+          <div class="cake-tier tier-middle">
+            <div class="cake-frosting"></div>
+            <span style="font-family:var(--font-hero); font-size:18px; color:#FDE047;">💥 SUPER HERO 💥</span>
+          </div>
+
+          <!-- Tier Bottom -->
+          <div class="cake-tier tier-bottom">
+            <div class="cake-frosting"></div>
+            <span style="font-family:var(--font-hero); font-size:20px; color:#FFFFFF;">🎉 HAPPY BIRTHDAY 🎉</span>
+          </div>
+
+          <!-- Cake Plate -->
+          <div class="cake-plate"></div>
+        </div>
+
+        <!-- Cake Controls -->
+        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+          <button id="blow-all-btn" class="hero-btn btn-accent" style="font-size:17px; padding:12px 24px;">💨 Blow All Candles!</button>
+          <button id="relight-btn" class="hero-btn btn-gold" style="font-size:17px; padding:12px 24px;">🔥 Relight Candles</button>
+        </div>
+
+        <!-- Cake Topper Selector -->
+        <div style="margin-top:30px; text-align:center;">
+          <h4 style="font-family:var(--font-hero); font-size:16px; color:#94A3B8; margin-bottom:10px;">PICK YOUR SUPER TOPPER:</h4>
+          <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+            <button class="hero-btn btn-primary topper-select-btn" data-topper="⚡">⚡ Lightning</button>
+            <button class="hero-btn btn-accent topper-select-btn" data-topper="🛡️">🛡️ Hero Shield</button>
+            <button class="hero-btn btn-gold topper-select-btn" data-topper="⭐">⭐ Star Power</button>
+            <button class="hero-btn btn-purple topper-select-btn" data-topper="🚀">🚀 Rocket</button>
+            <button class="hero-btn btn-cyan topper-select-btn" data-topper="👑">👑 Gold Crown</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 3D GREETING CARD -->
+    <section id="tab-card" class="tab-content">
+      <div class="hero-card" style="text-align:center;">
+        <div class="card-title-badge">💌 3D INTERACTIVE GREETING CARD</div>
+        <h2 style="font-family:var(--font-hero); font-size:28px; margin-bottom:6px;">
+          A SPECIAL MISSION GREETING!
+        </h2>
+        <p style="color:#94A3B8; margin-bottom:20px;">
+          Click the card or the button below to flip and open the 3D greeting!
+        </p>
+
+        <!-- 3D Card Structure -->
+        <div class="card-3d-wrapper">
+          <div id="main-greeting-card" class="greeting-card-3d">
+            
+            <!-- Card Front -->
+            <div class="card-front">
+              <div class="burst-tag" style="font-size:22px; margin-bottom:20px;">TOP SECRET MISSION</div>
+              
+              <!-- 3D Superhero Avatar -->
+              <svg class="pop-up-hero-figure" viewBox="0 0 100 100">
+                <path d="M 30 45 Q 15 90 20 95 Q 50 85 80 95 Q 85 90 70 45 Z" fill="#EF4444" stroke="#000" stroke-width="3"/>
+                <circle cx="50" cy="40" r="18" fill="#3B82F6" stroke="#000" stroke-width="3"/>
+                <polygon points="50,30 57,48 40,37 60,37 43,48" fill="#FDE047" stroke="#000" stroke-width="1.5"/>
+                <circle cx="50" cy="22" r="12" fill="#FCD34D" stroke="#000" stroke-width="2.5"/>
+                <path d="M 40 20 Q 50 25 60 20 Q 55 16 50 18 Q 45 16 40 20 Z" fill="#000"/>
+                <circle cx="46" cy="21" r="2" fill="#fff"/>
+                <circle cx="54" cy="21" r="2" fill="#fff"/>
+              </svg>
+
+              <h3 style="font-family:var(--font-hero); font-size:28px; color:#FDE047; text-shadow:2px 2px 0 #000;">
+                FOR: <span class="dynamic-hero-name">SUPER CHAMPION</span>
+              </h3>
+              <p style="color:#CBD5E1; font-weight:600; margin-top:8px; font-size:16px;">
+                ★ TAP CARD TO UNLOCK LEVEL 5 SECRET ★
+              </p>
+            </div>
+
+            <!-- Card Inside (Pop-up) -->
+            <div class="card-inside">
+              <div style="font-size:50px; animation:hero-hover 2s infinite ease-in-out;">🦸‍♂️</div>
+              <div class="burst-tag" style="background:#EF4444; color:#fff; margin-bottom:12px;">LEVEL 5 UNLOCKED!</div>
+              
+              <h3 style="font-family:var(--font-hero); font-size:26px; color:#FDE047;">
+                HAPPY 5TH BIRTHDAY, <span class="dynamic-hero-name">SUPER CHAMPION</span>!
+              </h3>
+              
+              <p id="dynamic-hero-message" style="color:#F1F5F9; font-size:18px; line-height:1.6; max-width:480px; margin:16px auto; font-weight:600;">
+                "May your 5th year be packed with awesome superhero adventures, super-speed zooming, mega-laughs, and tons of delicious birthday cake! You are our bravest, smartest hero!"
+              </p>
+
+              <div style="margin-top:14px; font-family:var(--font-hero); font-size:16px; color:#67E8F9;">
+                ⭐⭐⭐ FROM YOUR #1 SUPER-TEAM ⭐⭐⭐
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Card Action Controls -->
+        <div style="display:flex; justify-content:center; gap:14px; margin-top:20px; flex-wrap:wrap;">
+          <button id="open-card-btn" class="hero-btn btn-gold" style="font-size:16px;">✨ Open 3D Card!</button>
+          <button id="edit-card-btn" class="hero-btn btn-purple" style="font-size:16px;">✏️ Personalize Wish</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: HERO PHOTO COLLAGE (NEW) -->
+    <section id="tab-photos" class="tab-content">
+      <div class="hero-card">
+        <div class="card-title-badge">📸 SUPERHERO PHOTO COLLAGE</div>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:20px;">
+          <div>
+            <h2 style="font-family:var(--font-hero); font-size:28px; color:#FDE047;">
+              HERO MEMORIES & PHOTO VAULT
+            </h2>
+            <p style="color:#CBD5E1; font-size:16px;">
+              Add and celebrate memorable photos of the 5-year-old superhero in 3D polaroid frames!
+            </p>
+          </div>
+          
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <input type="file" id="photo-upload-input" accept="image/*" multiple style="display:none;">
+            <button id="upload-photo-btn" class="hero-btn btn-gold" style="font-size:16px;">➕ Add Hero Photo</button>
+            <button id="reset-gallery-btn" class="hero-btn btn-primary" style="font-size:14px;">🔄 Sample Photos</button>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Upload Zone -->
+        <div id="photo-dropzone" class="photo-dropzone" onclick="document.getElementById('photo-upload-input').click()">
+          <div class="dropzone-icon">🌟</div>
+          <h3 style="font-family:var(--font-hero); font-size:18px; color:#67E8F9; margin-bottom:6px;">
+            DRAG & DROP PHOTOS HERE, OR CLICK TO UPLOAD
+          </h3>
+          <p style="color:#94A3B8; font-size:14px;">
+            Supports JPG, PNG, WEBP, GIF (Saved automatically in your browser!)
+          </p>
+        </div>
+
+        <!-- 3D Polaroid Photo Collage Grid -->
+        <div id="photo-collage-grid" class="photo-collage-grid"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SUPERHERO MINI-GAMES -->
+    <section id="tab-games" class="tab-content">
+      
+      <!-- Mini-Game 1: Villain Bubble Pop -->
+      <div class="hero-card">
+        <div class="card-title-badge">🎮 GAME 1: VILLAIN BUBBLE POP</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+          <div>
+            <h3 style="font-family:var(--font-hero); font-size:22px; color:#FDE047;">ZAP THE FLYING VILLAINS!</h3>
+            <p style="color:#94A3B8; font-size:15px;">Tap or click the floating bubbles before they float away!</p>
+          </div>
+          <div style="font-family:var(--font-hero); font-size:22px; background:#0F172A; padding:8px 18px; border-radius:12px; border:2px solid #EF4444;">
+            SCORE: <span id="bubble-score" style="color:#FDE047;">0</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <canvas id="bubble-game-canvas" width="600" height="320" style="max-width:100%; background:#0B0F19; border:3px solid #3B82F6; border-radius:16px; box-shadow:0 6px 0 #000; cursor:crosshair;"></canvas>
+          <div style="margin-top:14px;">
+            <button id="start-bubble-game-btn" class="hero-btn btn-accent" style="font-size:17px; padding:12px 28px;">🚀 Start Bubble Pop!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini-Game 2: Catch the Birthday Treats -->
+      <div class="hero-card">
+        <div class="card-title-badge">🎮 GAME 2: CATCH BIRTHDAY TREATS</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+          <div>
+            <h3 style="font-family:var(--font-hero); font-size:22px; color:#38BDF8;">HERO SHIELD CATCH!</h3>
+            <p style="color:#94A3B8; font-size:15px;">Move your mouse or finger to catch falling stars and cake!</p>
+          </div>
+          <div style="font-family:var(--font-hero); font-size:22px; background:#0F172A; padding:8px 18px; border-radius:12px; border:2px solid #3B82F6;">
+            TREATS: <span id="catch-score" style="color:#FDE047;">0</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <canvas id="catch-game-canvas" width="600" height="320" style="max-width:100%; background:#0B0F19; border:3px solid #F59E0B; border-radius:16px; box-shadow:0 6px 0 #000; cursor:ew-resize;"></canvas>
+          <div style="margin-top:14px;">
+            <button id="start-catch-game-btn" class="hero-btn btn-gold" style="font-size:17px; padding:12px 28px;">⚡ Start Treat Catch!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini-Game 3: Memory Match -->
+      <div class="hero-card" style="text-align:center;">
+        <div class="card-title-badge">🎮 GAME 3: HERO BADGE MATCH</div>
+        <h3 style="font-family:var(--font-hero); font-size:22px; color:#A78BFA; margin-bottom:6px;">
+          FLIP & FIND MATCHING PAIRS!
+        </h3>
+        <p style="color:#94A3B8; font-size:15px; margin-bottom:16px;">
+          Test your superhero memory by flipping over matching hero emblems!
+        </p>
+
+        <div id="memory-cards-grid" class="memory-grid"></div>
+
+        <div style="margin-top:16px;">
+          <button id="reset-memory-game-btn" class="hero-btn btn-purple" style="font-size:16px;">🔄 Shuffle & Play Again</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 6: SUPERHERO HQ -->
+    <section id="tab-hq" class="tab-content">
+      
+      <!-- Power Scanner -->
+      <div class="hero-card scanner-box">
+        <div class="card-title-badge" style="background:#0891B2;">⚡ SUPERPOWER DNA SCANNER</div>
+        <h2 style="font-family:var(--font-hero); font-size:26px; color:#67E8F9; margin-bottom:8px;">
+          DISCOVER TODAY'S SUPERPOWER!
+        </h2>
+        <p style="color:#94A3B8; font-size:16px;">Press your finger/mouse on the glowing scanner pad to analyze your hero powers!</p>
+
+        <div id="hand-scanner-btn" class="scanner-hand-btn">
+          ✋
+          <div class="scanner-laser-line"></div>
+        </div>
+
+        <div id="scanner-result-box" style="min-height:60px;">
+          <p style="color:#64748B; font-weight:600;">[ Touch the hand scanner above to begin ]</p>
+        </div>
+      </div>
+
+      <!-- Comic Soundboard -->
+      <div class="hero-card">
+        <div class="card-title-badge">🔊 COMIC ACTION SOUNDBOARD</div>
+        <h3 style="font-family:var(--font-hero); font-size:22px; color:#FDE047; margin-bottom:10px;">
+          PRESS FOR SUPERHERO SOUND FX!
+        </h3>
+        <p style="color:#94A3B8;">Tap any button to generate real-time superhero sound effects synthesized right in your browser!</p>
+
+        <div class="soundboard-grid">
+          <div class="sound-btn soundboard-btn" data-sound="laser">
+            <span class="sound-btn-icon">⚡</span>
+            <span class="sound-btn-label">LASER ZAP</span>
+          </div>
+          <div class="sound-btn soundboard-btn" data-sound="bam">
+            <span class="sound-btn-icon">💥</span>
+            <span class="sound-btn-label">BAM PUNCH</span>
+          </div>
+          <div class="sound-btn soundboard-btn" data-sound="swoosh">
+            <span class="sound-btn-icon">💨</span>
+            <span class="sound-btn-label">SWOOSH</span>
+          </div>
+          <div class="sound-btn soundboard-btn" data-sound="powerup">
+            <span class="sound-btn-icon">⭐</span>
+            <span class="sound-btn-label">POWER UP</span>
+          </div>
+          <div class="sound-btn soundboard-btn" data-sound="fanfare">
+            <span class="sound-btn-icon">🎺</span>
+            <span class="sound-btn-label">FANFARE</span>
+          </div>
+          <div class="sound-btn soundboard-btn" data-sound="robot">
+            <span class="sound-btn-icon">🤖</span>
+            <span class="sound-btn-label">ROBOT BEEP</span>
+          </div>
+          <div class="sound-btn soundboard-btn" data-sound="pop">
+            <span class="sound-btn-icon">🎉</span>
+            <span class="sound-btn-label">PARTY POP</span>
+          </div>
+          <div class="sound-btn soundboard-btn" data-sound="birthday">
+            <span class="sound-btn-icon">🎂</span>
+            <span class="sound-btn-label">BIRTHDAY CHIME</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Superhero Suit Customizer -->
+      <div class="hero-card" style="text-align:center;">
+        <div class="card-title-badge">🦸‍♂️ 3D SUIT CUSTOMIZER</div>
+        <h3 style="font-family:var(--font-hero); font-size:22px; color:#38BDF8; margin-bottom:16px;">
+          DESIGN YOUR LEVEL 5 SUPERHERO SUIT!
+        </h3>
+
+        <div style="display:flex; justify-content:center; align-items:center; gap:30px; flex-wrap:wrap; margin-bottom:20px;">
+          <div style="width:160px; height:180px; background:#0F172A; border:3px solid #3B82F6; border-radius:20px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 0 #000;">
+            <svg viewBox="0 0 100 100" style="width:130px; height:130px;">
+              <path id="suit-cape-preview" d="M 25 40 Q 10 95 15 95 Q 50 85 85 95 Q 90 95 75 40 Z" fill="#EF4444" stroke="#000" stroke-width="3"/>
+              <circle cx="50" cy="45" r="22" fill="#2563EB" stroke="#000" stroke-width="3"/>
+              <text id="suit-emblem-preview" x="50" y="52" font-size="16" text-anchor="middle" fill="#FDE047">⚡</text>
+              <circle cx="50" cy="22" r="14" fill="#FCD34D" stroke="#000" stroke-width="2.5"/>
+              <path d="M 38 20 Q 50 25 62 20 Q 56 16 50 18 Q 44 16 38 20 Z" fill="#000"/>
+              <circle cx="45" cy="21" r="2" fill="#fff"/>
+              <circle cx="55" cy="21" r="2" fill="#fff"/>
+            </svg>
+          </div>
+
+          <div style="text-align:left;">
+            <h4 style="font-family:var(--font-hero); font-size:15px; color:#FDE047; margin-bottom:8px;">CAPE COLOR:</h4>
+            <div style="display:flex; gap:8px; margin-bottom:14px;">
+              <button class="hero-btn btn-accent cape-color-btn" data-color="#EF4444">🔴 Red</button>
+              <button class="hero-btn btn-primary cape-color-btn" data-color="#3B82F6">🔵 Blue</button>
+              <button class="hero-btn btn-gold cape-color-btn" data-color="#F59E0B">🟡 Gold</button>
+              <button class="hero-btn btn-purple cape-color-btn" data-color="#8B5CF6">🟣 Purple</button>
+              <button class="hero-btn btn-green cape-color-btn" data-color="#10B981">🟢 Green</button>
+            </div>
+
+            <h4 style="font-family:var(--font-hero); font-size:15px; color:#FDE047; margin-bottom:8px;">CHEST EMBLEM:</h4>
+            <div style="display:flex; gap:8px;">
+              <button class="hero-btn btn-primary emblem-option-btn" data-emblem="⚡">⚡ Lightning</button>
+              <button class="hero-btn btn-accent emblem-option-btn" data-emblem="⭐">⭐ Star</button>
+              <button class="hero-btn btn-gold emblem-option-btn" data-emblem="5">5 Level 5</button>
+              <button class="hero-btn btn-purple emblem-option-btn" data-emblem="🚀">🚀 Rocket</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Printable Level 5 Superhero Certificate -->
+      <div class="certificate-frame">
+        <div class="burst-tag" style="background:#DC2626; color:#fff; font-size:16px;">OFFICIAL DIPLOMA</div>
+        <h2 style="font-family:var(--font-hero); font-size:32px; color:#1E293B; margin:12px 0 6px;">
+          CERTIFICATE OF AWESOMENESS
+        </h2>
+        <p style="font-size:18px; color:#475569; font-weight:600;">
+          This galactic honor is proudly awarded to:
+        </p>
+
+        <h1 id="cert-hero-name" style="font-family:var(--font-hero); font-size:36px; color:#DC2626; margin:14px 0; text-decoration:underline;">
+          SUPER CHAMPION
+        </h1>
+
+        <p style="font-size:18px; color:#334155; max-width:550px; margin:0 auto; line-height:1.6; font-weight:600;">
+          For officially reaching <strong>LEVEL 5 SUPERHERO STATUS</strong> with unstoppable curiosity, lightning-fast zoomies, super kindness, and birthday greatness!
+        </p>
+
+        <div class="certificate-seal">
+          LEVEL 5<br>HERO
+        </div>
+
+        <div style="margin-top:20px;">
+          <button id="print-cert-btn" class="hero-btn btn-accent" style="font-size:17px; padding:12px 28px;">🖨️ Print Certificate</button>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- Photo Lightbox Modal -->
+  <div id="photo-lightbox-modal" class="lightbox-modal">
+    <div class="lightbox-content">
+      <div class="lightbox-img-box">
+        <img id="lightbox-img" src="" alt="Hero Photo">
+      </div>
+      <div id="lightbox-caption"></div>
+      <div style="margin-top:16px;">
+        <button id="close-lightbox-btn" class="hero-btn btn-primary" style="font-size:15px;">✖ Close Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personalize Message Modal -->
+  <div id="card-edit-modal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="font-family:var(--font-hero); font-size:22px; color:#FDE047; margin-bottom:10px;">
+        ✏️ PERSONALIZE BIRTHDAY WISH
+      </h3>
+      <p style="color:#94A3B8; font-size:14px; margin-bottom:16px;">
+        Enter the birthday boy's name and your special greeting message:
+      </p>
+
+      <label style="display:block; text-align:left; font-weight:bold; font-size:14px; color:#CBD5E1;">Birthday Hero Name:</label>
+      <input type="text" id="hero-name-input" class="modal-input" placeholder="e.g. Leo, Alex, Oliver..." value="SUPER CHAMPION">
+
+      <label style="display:block; text-align:left; font-weight:bold; font-size:14px; color:#CBD5E1;">Personal Birthday Wish:</label>
+      <textarea id="hero-message-input" class="modal-input" rows="4" placeholder="Write your superhero wish here...">Happy 5th Birthday to our unstoppable, curious superhero! May your year be full of high-flying adventures and big smiles!</textarea>
+
+      <div style="display:flex; justify-content:center; gap:12px; margin-top:10px;">
+        <button id="save-card-btn" class="hero-btn btn-gold" style="font-size:16px;">💾 Save & Update Card</button>
+        <button id="close-card-modal-btn" class="hero-btn btn-primary" style="font-size:16px;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Audio Mute Toggle Button -->
+  <div class="sound-toggle-bar">
+    <button id="global-sound-toggle" class="sound-toggle-btn" title="Toggle Sound">🔊</button>
+  </div>
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Application Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/scene3d.js"></script>
+  <script src="js/cake.js"></script>
+  <script src="js/greeting-card.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/hero-hq.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
