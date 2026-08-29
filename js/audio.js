@@ -1,18 +1,20 @@
-// Web Audio API Synthesizer for Superhero Sounds & Birthday Anthems
+// Web Audio API Synthesizer & Full Happy Birthday Song Orchestrator
 class SuperheroAudio {
   constructor() {
     this.ctx = null;
     this.muted = false;
     this.initialized = false;
+    this.isSongPlaying = false;
+    this.songTimeout = null;
+    this.activeNodes = [];
   }
 
   init() {
-    if (this.initialized) return;
+    if (this.initialized && this.ctx) return;
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioContext();
       this.initialized = true;
-      console.log("Superhero Web Audio initialized!");
     } catch (e) {
       console.warn("Web Audio API not supported", e);
     }
@@ -26,6 +28,9 @@ class SuperheroAudio {
 
   toggleMute() {
     this.muted = !this.muted;
+    if (this.muted && this.isSongPlaying) {
+      this.stopBirthdaySong();
+    }
     return this.muted;
   }
 
@@ -41,16 +46,16 @@ class SuperheroAudio {
 
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(880, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.2);
+    osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.18);
 
-    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.2);
+    osc.stop(this.ctx.currentTime + 0.18);
   }
 
   // Power Up Arpeggio
@@ -66,17 +71,17 @@ class SuperheroAudio {
       const gain = this.ctx.createGain();
 
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.05);
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.04);
 
-      gain.gain.setValueAtTime(0, this.ctx.currentTime + idx * 0.05);
-      gain.gain.linearRampToValueAtTime(0.2, this.ctx.currentTime + idx * 0.05 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.05 + 0.25);
+      gain.gain.setValueAtTime(0, this.ctx.currentTime + idx * 0.04);
+      gain.gain.linearRampToValueAtTime(0.18, this.ctx.currentTime + idx * 0.04 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.04 + 0.22);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
-      osc.start(this.ctx.currentTime + idx * 0.05);
-      osc.stop(this.ctx.currentTime + idx * 0.05 + 0.25);
+      osc.start(this.ctx.currentTime + idx * 0.04);
+      osc.stop(this.ctx.currentTime + idx * 0.04 + 0.22);
     });
   }
 
@@ -92,16 +97,16 @@ class SuperheroAudio {
 
     osc.type = 'square';
     osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.18);
+    osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.15);
 
-    gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
+    gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.18);
+    osc.stop(this.ctx.currentTime + 0.15);
   }
 
   // Hero Swoosh
@@ -116,21 +121,21 @@ class SuperheroAudio {
 
     osc.type = 'sine';
     osc.frequency.setValueAtTime(200, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.15);
-    osc.frequency.exponentialRampToValueAtTime(250, this.ctx.currentTime + 0.3);
+    osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(250, this.ctx.currentTime + 0.25);
 
     gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + 0.15);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+    gain.gain.linearRampToValueAtTime(0.2, this.ctx.currentTime + 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.3);
+    osc.stop(this.ctx.currentTime + 0.25);
   }
 
-  // Candle Blow Breath / Whoosh
+  // Candle Blow Breath
   playBlow() {
     if (this.muted) return;
     this.init();
@@ -142,16 +147,16 @@ class SuperheroAudio {
 
     osc.type = 'sine';
     osc.frequency.setValueAtTime(350, this.ctx.currentTime);
-    osc.frequency.linearRampToValueAtTime(120, this.ctx.currentTime + 0.4);
+    osc.frequency.linearRampToValueAtTime(120, this.ctx.currentTime + 0.35);
 
-    gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.4);
+    osc.stop(this.ctx.currentTime + 0.35);
   }
 
   // Confetti Cannon Pop
@@ -166,32 +171,31 @@ class SuperheroAudio {
 
     osc.type = 'sine';
     osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.1);
 
-    gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.12);
+    osc.stop(this.ctx.currentTime + 0.1);
   }
 
-  // Triumphant Fanfare (Level 5 Superhero Anthem)
+  // Triumphant Fanfare (Superhero Anthem)
   playFanfare() {
     if (this.muted) return;
     this.init();
     this.resume();
     if (!this.ctx) return;
 
-    // Fanfare Notes: C4, G4, C5, E5, G5
     const fanfareNotes = [
       { f: 261.63, d: 0.15, pause: 0 },
-      { f: 392.00, d: 0.15, pause: 0.18 },
-      { f: 523.25, d: 0.2, pause: 0.36 },
-      { f: 659.25, d: 0.2, pause: 0.58 },
-      { f: 783.99, d: 0.6, pause: 0.82 }
+      { f: 392.00, d: 0.15, pause: 0.16 },
+      { f: 523.25, d: 0.2, pause: 0.32 },
+      { f: 659.25, d: 0.2, pause: 0.52 },
+      { f: 783.99, d: 0.6, pause: 0.74 }
     ];
 
     fanfareNotes.forEach(item => {
@@ -201,7 +205,7 @@ class SuperheroAudio {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(item.f, this.ctx.currentTime + item.pause);
 
-      gain.gain.setValueAtTime(0.3, this.ctx.currentTime + item.pause);
+      gain.gain.setValueAtTime(0.25, this.ctx.currentTime + item.pause);
       gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + item.pause + item.d);
 
       osc.connect(gain);
@@ -212,94 +216,180 @@ class SuperheroAudio {
     });
   }
 
-  // Happy Birthday Chimes (Synthesized)
-  playHappyBirthday() {
+  /* =========================================================
+     FULL ORCHESTRATED HAPPY BIRTHDAY SONG WITH HARMONY
+     ========================================================= */
+  playHappyBirthdaySong(loop = true) {
     if (this.muted) return;
     this.init();
     this.resume();
     if (!this.ctx) return;
 
-    // Happy Birthday melody notes: G4 G4 A4 G4 C5 B4 ...
-    const melody = [
-      { f: 392, d: 0.25, t: 0 },
-      { f: 392, d: 0.25, t: 0.3 },
-      { f: 440, d: 0.45, t: 0.6 },
-      { f: 392, d: 0.45, t: 1.1 },
-      { f: 523.25, d: 0.45, t: 1.6 },
-      { f: 493.88, d: 0.8, t: 2.1 },
+    this.stopBirthdaySong();
+    this.isSongPlaying = true;
+    this.updateMusicUI(true);
+
+    const now = this.ctx.currentTime + 0.05;
+    const tempo = 0.52; // Beat duration in seconds
+
+    // Full Happy Birthday Melody Notes & Beats:
+    // [Note, Octave, Duration in beats, Start Beat, Chord Base]
+    const songScore = [
+      // Phrase 1: "Happy Birthday to you"
+      { f: 392.00, beat: 0, dur: 0.75 },     // G4 (Hap-)
+      { f: 392.00, beat: 0.75, dur: 0.25 },  // G4 (-py)
+      { f: 440.00, beat: 1.0, dur: 1.0 },    // A4 (Birth-)
+      { f: 392.00, beat: 2.0, dur: 1.0 },    // G4 (-day)
+      { f: 523.25, beat: 3.0, dur: 1.0 },    // C5 (to)
+      { f: 493.88, beat: 4.0, dur: 2.0 },    // B4 (you!)
       
-      { f: 392, d: 0.25, t: 3.0 },
-      { f: 392, d: 0.25, t: 3.3 },
-      { f: 440, d: 0.45, t: 3.6 },
-      { f: 392, d: 0.45, t: 4.1 },
-      { f: 587.33, d: 0.45, t: 4.6 },
-      { f: 523.25, d: 0.8, t: 5.1 }
+      // Phrase 2: "Happy Birthday to you"
+      { f: 392.00, beat: 6.0, dur: 0.75 },   // G4 (Hap-)
+      { f: 392.00, beat: 6.75, dur: 0.25 },  // G4 (-py)
+      { f: 440.00, beat: 7.0, dur: 1.0 },    // A4 (Birth-)
+      { f: 392.00, beat: 8.0, dur: 1.0 },    // G4 (-day)
+      { f: 587.33, beat: 9.0, dur: 1.0 },    // D5 (to)
+      { f: 523.25, beat: 10.0, dur: 2.0 },   // C5 (you!)
+
+      // Phrase 3: "Happy Birthday dear Superhero"
+      { f: 392.00, beat: 12.0, dur: 0.75 },  // G4 (Hap-)
+      { f: 392.00, beat: 12.75, dur: 0.25 }, // G4 (-py)
+      { f: 783.99, beat: 13.0, dur: 1.0 },   // G5 (Birth-)
+      { f: 659.25, beat: 14.0, dur: 1.0 },   // E5 (-day)
+      { f: 523.25, beat: 15.0, dur: 1.0 },   // C5 (dear)
+      { f: 493.88, beat: 16.0, dur: 1.0 },   // B4 (Su-)
+      { f: 440.00, beat: 17.0, dur: 1.5 },   // A4 (-perhero!)
+
+      // Phrase 4: "Happy Birthday to you!"
+      { f: 698.46, beat: 18.5, dur: 0.75 },  // F5 (Hap-)
+      { f: 698.46, beat: 19.25, dur: 0.25 }, // F5 (-py)
+      { f: 659.25, beat: 19.5, dur: 1.0 },   // E5 (Birth-)
+      { f: 523.25, beat: 20.5, dur: 1.0 },   // C5 (-day)
+      { f: 587.33, beat: 21.5, dur: 1.0 },   // D5 (to)
+      { f: 523.25, beat: 22.5, dur: 2.5 }    // C5 (you-u-u!)
     ];
 
-    melody.forEach(n => {
+    // Rich Harmony Chords (Warm Bass Bells)
+    const chords = [
+      { f: 130.81, beat: 0, dur: 5.5 },   // C3 Chord Base
+      { f: 196.00, beat: 6, dur: 5.5 },   // G3 Chord Base
+      { f: 130.81, beat: 12, dur: 5.5 },  // C3 Chord Base
+      { f: 174.61, beat: 18, dur: 3.0 },  // F3 Chord Base
+      { f: 196.00, beat: 21, dur: 1.5 },  // G3 Chord Base
+      { f: 130.81, beat: 22.5, dur: 3.0 } // C3 Final Chord
+    ];
+
+    // Play Main Melody with Warm Music-Box Chime Tone
+    songScore.forEach(note => {
+      const startTime = now + note.beat * tempo;
+      const duration = note.dur * tempo;
+
+      // Primary Chime
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(note.f, startTime);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(n.f, this.ctx.currentTime + n.t);
-
-      gain.gain.setValueAtTime(0, this.ctx.currentTime + n.t);
-      gain.gain.linearRampToValueAtTime(0.25, this.ctx.currentTime + n.t + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + n.t + n.d);
+      gain.gain.setValueAtTime(0.001, startTime);
+      gain.gain.linearRampToValueAtTime(0.22, startTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.05);
 
-      osc.start(this.ctx.currentTime + n.t);
-      osc.stop(this.ctx.currentTime + n.t + n.d);
+      // Sparkle Harmonic Bell Overtone
+      const bellOsc = this.ctx.createOscillator();
+      const bellGain = this.ctx.createGain();
+      bellOsc.type = 'sine';
+      bellOsc.frequency.setValueAtTime(note.f * 2, startTime);
+
+      bellGain.gain.setValueAtTime(0.001, startTime);
+      bellGain.gain.linearRampToValueAtTime(0.08, startTime + 0.02);
+      bellGain.gain.exponentialRampToValueAtTime(0.001, startTime + Math.min(duration, 0.4));
+
+      bellOsc.connect(bellGain);
+      bellGain.connect(this.ctx.destination);
+      bellOsc.start(startTime);
+      bellOsc.stop(startTime + duration + 0.05);
+
+      this.activeNodes.push(osc, bellOsc);
     });
-  }
 
-  // Robot Beep
-  playRobot() {
-    if (this.muted) return;
-    this.init();
-    this.resume();
-    if (!this.ctx) return;
+    // Play Warm Bass Accompaniment
+    chords.forEach(ch => {
+      const startTime = now + ch.beat * tempo;
+      const duration = ch.dur * tempo;
 
-    for (let i = 0; i < 4; i++) {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(400 + i * 200, this.ctx.currentTime + i * 0.08);
+      const bassOsc = this.ctx.createOscillator();
+      const bassGain = this.ctx.createGain();
+      bassOsc.type = 'sine';
+      bassOsc.frequency.setValueAtTime(ch.f, startTime);
 
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime + i * 0.08);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + i * 0.08 + 0.06);
+      bassGain.gain.setValueAtTime(0.001, startTime);
+      bassGain.gain.linearRampToValueAtTime(0.12, startTime + 0.1);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(this.ctx.currentTime + i * 0.08);
-      osc.stop(this.ctx.currentTime + i * 0.08 + 0.06);
+      bassOsc.connect(bassGain);
+      bassGain.connect(this.ctx.destination);
+      bassOsc.start(startTime);
+      bassOsc.stop(startTime + duration);
+
+      this.activeNodes.push(bassOsc);
+    });
+
+    const totalSongDurationMs = (25.5 * tempo * 1000);
+
+    // Loop Song if enabled
+    if (loop) {
+      this.songTimeout = setTimeout(() => {
+        if (this.isSongPlaying && !this.muted) {
+          this.playHappyBirthdaySong(true);
+        }
+      }, totalSongDurationMs);
     }
   }
 
-  // Card Flip SFX
-  playCardFlip() {
-    if (this.muted) return;
-    this.init();
-    this.resume();
-    if (!this.ctx) return;
+  stopBirthdaySong() {
+    this.isSongPlaying = false;
+    if (this.songTimeout) {
+      clearTimeout(this.songTimeout);
+      this.songTimeout = null;
+    }
+    this.activeNodes.forEach(node => {
+      try {
+        node.stop();
+        node.disconnect();
+      } catch (e) {}
+    });
+    this.activeNodes = [];
+    this.updateMusicUI(false);
+  }
 
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
+  toggleBirthdaySong() {
+    if (this.isSongPlaying) {
+      this.stopBirthdaySong();
+      if (window.heroBabyAlbum) window.heroBabyAlbum.showToast('⏸️ Birthday Song Paused');
+    } else {
+      this.playHappyBirthdaySong(true);
+      if (window.heroBabyAlbum) window.heroBabyAlbum.showToast('🎶 Playing Happy Birthday Song!');
+    }
+    return this.isSongPlaying;
+  }
 
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.1);
+  updateMusicUI(isPlaying) {
+    const musicBtn = document.getElementById('global-music-toggle');
+    const headerMusicBtn = document.getElementById('header-music-btn');
 
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.1);
+    if (musicBtn) {
+      musicBtn.innerHTML = isPlaying ? "🎶" : "🎵";
+      musicBtn.classList.toggle('playing-pulse', isPlaying);
+    }
+    if (headerMusicBtn) {
+      headerMusicBtn.innerHTML = isPlaying ? "⏸️ Pause Song 🎶" : "🎵 Play Birthday Song";
+      headerMusicBtn.classList.toggle('active-playing', isPlaying);
+    }
   }
 }
 

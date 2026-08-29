@@ -9,9 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Chakra+Petch:wght@500;700&family=Fredoka:wght@400;600;700&family=Russo+One&display=swap" rel="stylesheet">
-  
-  <!-- Embedded Image Assets (Preloaded for instant display) -->
-  
 
   <!-- Immediate Saved Background Paint Engine -->
   <script>
@@ -29,108 +26,7 @@
     })();
   </script>
 
-  <!-- Stylesheets -->
-  
-  
-  
   <style>
-    /* Memory Match Game Specific CSS */
-    .memory-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      max-width: 450px;
-      margin: 20px auto;
-    }
-    @media (max-width: 480px) {
-      .memory-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-    .memory-card {
-      height: 90px;
-      perspective: 800px;
-      cursor: pointer;
-    }
-    .card-inner {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .memory-card.flipped .card-inner,
-    .memory-card.matched .card-inner {
-      transform: rotateY(180deg);
-    }
-    .card-back, .card-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 14px;
-      border: 3px solid #000;
-      box-shadow: 0 4px 0 #000;
-      font-size: 36px;
-    }
-    .card-back {
-      background: linear-gradient(135deg, #1E3A8A, #3B82F6);
-      color: #FDE047;
-    }
-    .card-face {
-      background: linear-gradient(135deg, #F59E0B, #EF4444);
-      transform: rotateY(180deg);
-    }
-    .memory-card.matched .card-face {
-      background: linear-gradient(135deg, #10B981, #059669);
-      animation: pulse-glow 1s infinite alternate;
-    }
-
-    /* Modal Overlay */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(6, 9, 19, 0.9);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 20px;
-    }
-    .modal-box {
-      background: #1E293B;
-      border: 4px solid #F59E0B;
-      border-radius: var(--radius-lg);
-      padding: 30px;
-      max-width: 500px;
-      width: 100%;
-      box-shadow: 0 16px 0 #000, 0 0 35px rgba(245, 158, 11, 0.4);
-      text-align: center;
-    }
-    .modal-input {
-      width: 100%;
-      padding: 12px 16px;
-      background: #0F172A;
-      border: 2px solid #3B82F6;
-      border-radius: 12px;
-      color: #fff;
-      font-family: var(--font-body);
-      font-size: 16px;
-      margin: 10px 0 16px;
-      outline: none;
-    }
-    .modal-input:focus {
-      border-color: #FDE047;
-      box-shadow: 0 0 12px rgba(253, 224, 71, 0.5);
-    }
-  </style>
-<style>
 :root {
   --bg-deep: #060913;
   --bg-card: rgba(13, 20, 36, 0.94);
@@ -570,6 +466,36 @@ body {
 }
 .sound-toggle-btn:hover {
   transform: scale(1.1);
+}
+
+.music-toggle-btn {
+  background: linear-gradient(135deg, #D97706, #F59E0B);
+  border-color: #FDE047;
+}
+
+.playing-pulse {
+  background: linear-gradient(135deg, #10B981, #059669) !important;
+  border-color: #FDE047 !important;
+  animation: music-btn-beat 0.6s infinite alternate ease-in-out;
+}
+
+.header-music-btn {
+  background: linear-gradient(135deg, #F59E0B, #EA580C);
+  border-color: #FDE047;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-music-btn.active-playing {
+  background: linear-gradient(135deg, #10B981, #047857) !important;
+  border-color: #6EE7B7 !important;
+  color: #fff !important;
+}
+
+@keyframes music-btn-beat {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.12); box-shadow: 0 0 16px rgba(16, 185, 129, 0.7); }
 }
 
 /* Fast Toast Message */
@@ -1380,7 +1306,102 @@ body {
   }
 }
 
-</style>
+    /* Memory Match Game Specific CSS */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-width: 450px;
+      margin: 20px auto;
+    }
+    @media (max-width: 480px) {
+      .memory-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .memory-card {
+      height: 90px;
+      perspective: 800px;
+      cursor: pointer;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .memory-card.flipped .card-inner,
+    .memory-card.matched .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-back, .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      border: 3px solid #000;
+      box-shadow: 0 4px 0 #000;
+      font-size: 36px;
+    }
+    .card-back {
+      background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+      color: #FDE047;
+    }
+    .card-face {
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      transform: rotateY(180deg);
+    }
+    .memory-card.matched .card-face {
+      background: linear-gradient(135deg, #10B981, #059669);
+      animation: pulse-glow 1s infinite alternate;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(6, 9, 19, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #1E293B;
+      border: 4px solid #F59E0B;
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 16px 0 #000, 0 0 35px rgba(245, 158, 11, 0.4);
+      text-align: center;
+    }
+    .modal-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: #0F172A;
+      border: 2px solid #3B82F6;
+      border-radius: 12px;
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 16px;
+      margin: 10px 0 16px;
+      outline: none;
+    }
+    .modal-input:focus {
+      border-color: #FDE047;
+      box-shadow: 0 0 12px rgba(253, 224, 71, 0.5);
+    }
+  </style>
 </head>
 <body class="comic-halftone">
 
@@ -1407,8 +1428,12 @@ body {
         </div>
       </div>
 
-      <!-- Quick Actions & Background Controller -->
+      <!-- Quick Actions & Music & Background Controller -->
       <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <button id="header-music-btn" class="hero-btn header-music-btn" title="Play Happy Birthday Song!">
+          🎵 Play Birthday Song
+        </button>
+
         <div class="bg-controls-bar" title="Switch Website Background Photo">
           <span class="bg-controls-label">🖼️ PHOTO:</span>
           <button class="bg-switcher-btn active" data-bg-key="img1" title="Prince Archer (Today)">🏹 Archer</button>
@@ -1464,10 +1489,10 @@ body {
         </p>
         
         <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:25px;">
-          <button onclick="document.querySelector('[data-tab=tab-album]').click()" class="hero-btn btn-gold" style="font-size:18px; padding:14px 28px;">🍼 Baby Album (9)</button>
-          <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-primary" style="font-size:18px; padding:14px 28px;">🎂 Blow 5 Candles</button>
-          <button onclick="document.querySelector('[data-tab=tab-games]').click()" class="hero-btn btn-accent" style="font-size:18px; padding:14px 28px;">🎮 Play Mini-Games</button>
-          <button onclick="document.querySelector('[data-tab=tab-card]').click()" class="hero-btn btn-purple" style="font-size:18px; padding:14px 28px;">💌 Open 3D Card</button>
+          <button onclick="window.superAudio.toggleBirthdaySong()" class="hero-btn btn-gold" style="font-size:18px; padding:14px 28px;">🎶 Play Birthday Song</button>
+          <button onclick="document.querySelector('[data-tab=tab-album]').click()" class="hero-btn btn-primary" style="font-size:18px; padding:14px 28px;">🍼 Baby Album (9)</button>
+          <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-accent" style="font-size:18px; padding:14px 28px;">🎂 Blow 5 Candles</button>
+          <button onclick="document.querySelector('[data-tab=tab-games]').click()" class="hero-btn btn-purple" style="font-size:18px; padding:14px 28px;">🎮 Play Mini-Games</button>
         </div>
 
         <!-- Super Hero Stats Grid -->
@@ -1506,7 +1531,7 @@ body {
           <div>
             <div class="game-icon-large">🎂</div>
             <h3 style="font-family:var(--font-hero); font-size:20px; color:#FDE047;">Interactive 3D Cake</h3>
-            <p style="color:#CBD5E1; margin:10px 0;">Click or blow out all 5 glowing candles to unlock live sparklers, fireworks, and the fanfare!</p>
+            <p style="color:#CBD5E1; margin:10px 0;">Click or blow out all 5 glowing candles to unlock live sparklers, fireworks, and the Happy Birthday Song!</p>
           </div>
           <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-gold" style="margin-top:14px;">Go to Cake ➔</button>
         </div>
@@ -1839,6 +1864,10 @@ body {
             <span class="sound-btn-icon">🎺</span>
             <span class="sound-btn-label">FANFARE</span>
           </div>
+          <div class="sound-btn soundboard-btn" data-sound="birthday">
+            <span class="sound-btn-icon">🎂</span>
+            <span class="sound-btn-label">BIRTHDAY SONG</span>
+          </div>
           <div class="sound-btn soundboard-btn" data-sound="robot">
             <span class="sound-btn-icon">🤖</span>
             <span class="sound-btn-label">ROBOT BEEP</span>
@@ -1846,10 +1875,6 @@ body {
           <div class="sound-btn soundboard-btn" data-sound="pop">
             <span class="sound-btn-icon">🎉</span>
             <span class="sound-btn-label">PARTY POP</span>
-          </div>
-          <div class="sound-btn soundboard-btn" data-sound="birthday">
-            <span class="sound-btn-icon">🎂</span>
-            <span class="sound-btn-label">BIRTHDAY CHIME</span>
           </div>
         </div>
       </div>
@@ -2001,26 +2026,6 @@ body {
     </div>
   </div>
 
-  <!-- Floating Audio Mute Toggle Button -->
-  <div class="sound-toggle-bar">
-    <button id="global-sound-toggle" class="sound-toggle-btn" title="Toggle Sound">🔊</button>
-  </div>
-
-  <!-- External Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-  <!-- Application Scripts -->
-  
-  
-  
-  
-  
-  
-  
-  
-
-
   <!-- 📤 Share Hub Modal -->
   <div id="share-hub-modal" class="modal-overlay" style="display:none;">
     <div class="modal-box" style="max-width:480px; text-align:center;">
@@ -2029,7 +2034,7 @@ body {
         SHARE BIRTHDAY WEBSITE
       </h3>
       <p style="color:#CBD5E1; font-size:15px; margin-bottom:20px; line-height:1.5;">
-        Send this interactive Superhero Birthday Card & Baby Album to family and friends!
+        Send this interactive Superhero Birthday Card, Happy Birthday Song & Baby Album to family and friends!
       </p>
 
       <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
@@ -2053,7 +2058,18 @@ body {
     </div>
   </div>
 
-<script>
+  <!-- Floating Audio & Music Toggle Buttons -->
+  <div class="sound-toggle-bar">
+    <button id="global-music-toggle" class="sound-toggle-btn music-toggle-btn" title="Toggle Happy Birthday Song">🎵</button>
+    <button id="global-sound-toggle" class="sound-toggle-btn" title="Toggle Sound FX">🔊</button>
+  </div>
+
+  <!-- External Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Bundled All-in-One JavaScript -->
+  <script>
 
 /* --- embedded-images.js --- */
 ﻿window.HERO_PHOTOS = {
@@ -2071,21 +2087,23 @@ body {
 
 
 /* --- audio.js --- */
-// Web Audio API Synthesizer for Superhero Sounds & Birthday Anthems
+// Web Audio API Synthesizer & Full Happy Birthday Song Orchestrator
 class SuperheroAudio {
   constructor() {
     this.ctx = null;
     this.muted = false;
     this.initialized = false;
+    this.isSongPlaying = false;
+    this.songTimeout = null;
+    this.activeNodes = [];
   }
 
   init() {
-    if (this.initialized) return;
+    if (this.initialized && this.ctx) return;
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       this.ctx = new AudioContext();
       this.initialized = true;
-      console.log("Superhero Web Audio initialized!");
     } catch (e) {
       console.warn("Web Audio API not supported", e);
     }
@@ -2099,6 +2117,9 @@ class SuperheroAudio {
 
   toggleMute() {
     this.muted = !this.muted;
+    if (this.muted && this.isSongPlaying) {
+      this.stopBirthdaySong();
+    }
     return this.muted;
   }
 
@@ -2114,16 +2135,16 @@ class SuperheroAudio {
 
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(880, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.2);
+    osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.18);
 
-    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.2);
+    osc.stop(this.ctx.currentTime + 0.18);
   }
 
   // Power Up Arpeggio
@@ -2139,17 +2160,17 @@ class SuperheroAudio {
       const gain = this.ctx.createGain();
 
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.05);
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.04);
 
-      gain.gain.setValueAtTime(0, this.ctx.currentTime + idx * 0.05);
-      gain.gain.linearRampToValueAtTime(0.2, this.ctx.currentTime + idx * 0.05 + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.05 + 0.25);
+      gain.gain.setValueAtTime(0, this.ctx.currentTime + idx * 0.04);
+      gain.gain.linearRampToValueAtTime(0.18, this.ctx.currentTime + idx * 0.04 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.04 + 0.22);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
-      osc.start(this.ctx.currentTime + idx * 0.05);
-      osc.stop(this.ctx.currentTime + idx * 0.05 + 0.25);
+      osc.start(this.ctx.currentTime + idx * 0.04);
+      osc.stop(this.ctx.currentTime + idx * 0.04 + 0.22);
     });
   }
 
@@ -2165,16 +2186,16 @@ class SuperheroAudio {
 
     osc.type = 'square';
     osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.18);
+    osc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.15);
 
-    gain.gain.setValueAtTime(0.5, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
+    gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.18);
+    osc.stop(this.ctx.currentTime + 0.15);
   }
 
   // Hero Swoosh
@@ -2189,21 +2210,21 @@ class SuperheroAudio {
 
     osc.type = 'sine';
     osc.frequency.setValueAtTime(200, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.15);
-    osc.frequency.exponentialRampToValueAtTime(250, this.ctx.currentTime + 0.3);
+    osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(250, this.ctx.currentTime + 0.25);
 
     gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + 0.15);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+    gain.gain.linearRampToValueAtTime(0.2, this.ctx.currentTime + 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.3);
+    osc.stop(this.ctx.currentTime + 0.25);
   }
 
-  // Candle Blow Breath / Whoosh
+  // Candle Blow Breath
   playBlow() {
     if (this.muted) return;
     this.init();
@@ -2215,16 +2236,16 @@ class SuperheroAudio {
 
     osc.type = 'sine';
     osc.frequency.setValueAtTime(350, this.ctx.currentTime);
-    osc.frequency.linearRampToValueAtTime(120, this.ctx.currentTime + 0.4);
+    osc.frequency.linearRampToValueAtTime(120, this.ctx.currentTime + 0.35);
 
-    gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.4);
+    osc.stop(this.ctx.currentTime + 0.35);
   }
 
   // Confetti Cannon Pop
@@ -2239,32 +2260,31 @@ class SuperheroAudio {
 
     osc.type = 'sine';
     osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.1);
 
-    gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
 
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.12);
+    osc.stop(this.ctx.currentTime + 0.1);
   }
 
-  // Triumphant Fanfare (Level 5 Superhero Anthem)
+  // Triumphant Fanfare (Superhero Anthem)
   playFanfare() {
     if (this.muted) return;
     this.init();
     this.resume();
     if (!this.ctx) return;
 
-    // Fanfare Notes: C4, G4, C5, E5, G5
     const fanfareNotes = [
       { f: 261.63, d: 0.15, pause: 0 },
-      { f: 392.00, d: 0.15, pause: 0.18 },
-      { f: 523.25, d: 0.2, pause: 0.36 },
-      { f: 659.25, d: 0.2, pause: 0.58 },
-      { f: 783.99, d: 0.6, pause: 0.82 }
+      { f: 392.00, d: 0.15, pause: 0.16 },
+      { f: 523.25, d: 0.2, pause: 0.32 },
+      { f: 659.25, d: 0.2, pause: 0.52 },
+      { f: 783.99, d: 0.6, pause: 0.74 }
     ];
 
     fanfareNotes.forEach(item => {
@@ -2274,7 +2294,7 @@ class SuperheroAudio {
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(item.f, this.ctx.currentTime + item.pause);
 
-      gain.gain.setValueAtTime(0.3, this.ctx.currentTime + item.pause);
+      gain.gain.setValueAtTime(0.25, this.ctx.currentTime + item.pause);
       gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + item.pause + item.d);
 
       osc.connect(gain);
@@ -2285,94 +2305,180 @@ class SuperheroAudio {
     });
   }
 
-  // Happy Birthday Chimes (Synthesized)
-  playHappyBirthday() {
+  /* =========================================================
+     FULL ORCHESTRATED HAPPY BIRTHDAY SONG WITH HARMONY
+     ========================================================= */
+  playHappyBirthdaySong(loop = true) {
     if (this.muted) return;
     this.init();
     this.resume();
     if (!this.ctx) return;
 
-    // Happy Birthday melody notes: G4 G4 A4 G4 C5 B4 ...
-    const melody = [
-      { f: 392, d: 0.25, t: 0 },
-      { f: 392, d: 0.25, t: 0.3 },
-      { f: 440, d: 0.45, t: 0.6 },
-      { f: 392, d: 0.45, t: 1.1 },
-      { f: 523.25, d: 0.45, t: 1.6 },
-      { f: 493.88, d: 0.8, t: 2.1 },
+    this.stopBirthdaySong();
+    this.isSongPlaying = true;
+    this.updateMusicUI(true);
+
+    const now = this.ctx.currentTime + 0.05;
+    const tempo = 0.52; // Beat duration in seconds
+
+    // Full Happy Birthday Melody Notes & Beats:
+    // [Note, Octave, Duration in beats, Start Beat, Chord Base]
+    const songScore = [
+      // Phrase 1: "Happy Birthday to you"
+      { f: 392.00, beat: 0, dur: 0.75 },     // G4 (Hap-)
+      { f: 392.00, beat: 0.75, dur: 0.25 },  // G4 (-py)
+      { f: 440.00, beat: 1.0, dur: 1.0 },    // A4 (Birth-)
+      { f: 392.00, beat: 2.0, dur: 1.0 },    // G4 (-day)
+      { f: 523.25, beat: 3.0, dur: 1.0 },    // C5 (to)
+      { f: 493.88, beat: 4.0, dur: 2.0 },    // B4 (you!)
       
-      { f: 392, d: 0.25, t: 3.0 },
-      { f: 392, d: 0.25, t: 3.3 },
-      { f: 440, d: 0.45, t: 3.6 },
-      { f: 392, d: 0.45, t: 4.1 },
-      { f: 587.33, d: 0.45, t: 4.6 },
-      { f: 523.25, d: 0.8, t: 5.1 }
+      // Phrase 2: "Happy Birthday to you"
+      { f: 392.00, beat: 6.0, dur: 0.75 },   // G4 (Hap-)
+      { f: 392.00, beat: 6.75, dur: 0.25 },  // G4 (-py)
+      { f: 440.00, beat: 7.0, dur: 1.0 },    // A4 (Birth-)
+      { f: 392.00, beat: 8.0, dur: 1.0 },    // G4 (-day)
+      { f: 587.33, beat: 9.0, dur: 1.0 },    // D5 (to)
+      { f: 523.25, beat: 10.0, dur: 2.0 },   // C5 (you!)
+
+      // Phrase 3: "Happy Birthday dear Superhero"
+      { f: 392.00, beat: 12.0, dur: 0.75 },  // G4 (Hap-)
+      { f: 392.00, beat: 12.75, dur: 0.25 }, // G4 (-py)
+      { f: 783.99, beat: 13.0, dur: 1.0 },   // G5 (Birth-)
+      { f: 659.25, beat: 14.0, dur: 1.0 },   // E5 (-day)
+      { f: 523.25, beat: 15.0, dur: 1.0 },   // C5 (dear)
+      { f: 493.88, beat: 16.0, dur: 1.0 },   // B4 (Su-)
+      { f: 440.00, beat: 17.0, dur: 1.5 },   // A4 (-perhero!)
+
+      // Phrase 4: "Happy Birthday to you!"
+      { f: 698.46, beat: 18.5, dur: 0.75 },  // F5 (Hap-)
+      { f: 698.46, beat: 19.25, dur: 0.25 }, // F5 (-py)
+      { f: 659.25, beat: 19.5, dur: 1.0 },   // E5 (Birth-)
+      { f: 523.25, beat: 20.5, dur: 1.0 },   // C5 (-day)
+      { f: 587.33, beat: 21.5, dur: 1.0 },   // D5 (to)
+      { f: 523.25, beat: 22.5, dur: 2.5 }    // C5 (you-u-u!)
     ];
 
-    melody.forEach(n => {
+    // Rich Harmony Chords (Warm Bass Bells)
+    const chords = [
+      { f: 130.81, beat: 0, dur: 5.5 },   // C3 Chord Base
+      { f: 196.00, beat: 6, dur: 5.5 },   // G3 Chord Base
+      { f: 130.81, beat: 12, dur: 5.5 },  // C3 Chord Base
+      { f: 174.61, beat: 18, dur: 3.0 },  // F3 Chord Base
+      { f: 196.00, beat: 21, dur: 1.5 },  // G3 Chord Base
+      { f: 130.81, beat: 22.5, dur: 3.0 } // C3 Final Chord
+    ];
+
+    // Play Main Melody with Warm Music-Box Chime Tone
+    songScore.forEach(note => {
+      const startTime = now + note.beat * tempo;
+      const duration = note.dur * tempo;
+
+      // Primary Chime
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(note.f, startTime);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(n.f, this.ctx.currentTime + n.t);
-
-      gain.gain.setValueAtTime(0, this.ctx.currentTime + n.t);
-      gain.gain.linearRampToValueAtTime(0.25, this.ctx.currentTime + n.t + 0.04);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + n.t + n.d);
+      gain.gain.setValueAtTime(0.001, startTime);
+      gain.gain.linearRampToValueAtTime(0.22, startTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + duration + 0.05);
 
-      osc.start(this.ctx.currentTime + n.t);
-      osc.stop(this.ctx.currentTime + n.t + n.d);
+      // Sparkle Harmonic Bell Overtone
+      const bellOsc = this.ctx.createOscillator();
+      const bellGain = this.ctx.createGain();
+      bellOsc.type = 'sine';
+      bellOsc.frequency.setValueAtTime(note.f * 2, startTime);
+
+      bellGain.gain.setValueAtTime(0.001, startTime);
+      bellGain.gain.linearRampToValueAtTime(0.08, startTime + 0.02);
+      bellGain.gain.exponentialRampToValueAtTime(0.001, startTime + Math.min(duration, 0.4));
+
+      bellOsc.connect(bellGain);
+      bellGain.connect(this.ctx.destination);
+      bellOsc.start(startTime);
+      bellOsc.stop(startTime + duration + 0.05);
+
+      this.activeNodes.push(osc, bellOsc);
     });
-  }
 
-  // Robot Beep
-  playRobot() {
-    if (this.muted) return;
-    this.init();
-    this.resume();
-    if (!this.ctx) return;
+    // Play Warm Bass Accompaniment
+    chords.forEach(ch => {
+      const startTime = now + ch.beat * tempo;
+      const duration = ch.dur * tempo;
 
-    for (let i = 0; i < 4; i++) {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(400 + i * 200, this.ctx.currentTime + i * 0.08);
+      const bassOsc = this.ctx.createOscillator();
+      const bassGain = this.ctx.createGain();
+      bassOsc.type = 'sine';
+      bassOsc.frequency.setValueAtTime(ch.f, startTime);
 
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime + i * 0.08);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + i * 0.08 + 0.06);
+      bassGain.gain.setValueAtTime(0.001, startTime);
+      bassGain.gain.linearRampToValueAtTime(0.12, startTime + 0.1);
+      bassGain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start(this.ctx.currentTime + i * 0.08);
-      osc.stop(this.ctx.currentTime + i * 0.08 + 0.06);
+      bassOsc.connect(bassGain);
+      bassGain.connect(this.ctx.destination);
+      bassOsc.start(startTime);
+      bassOsc.stop(startTime + duration);
+
+      this.activeNodes.push(bassOsc);
+    });
+
+    const totalSongDurationMs = (25.5 * tempo * 1000);
+
+    // Loop Song if enabled
+    if (loop) {
+      this.songTimeout = setTimeout(() => {
+        if (this.isSongPlaying && !this.muted) {
+          this.playHappyBirthdaySong(true);
+        }
+      }, totalSongDurationMs);
     }
   }
 
-  // Card Flip SFX
-  playCardFlip() {
-    if (this.muted) return;
-    this.init();
-    this.resume();
-    if (!this.ctx) return;
+  stopBirthdaySong() {
+    this.isSongPlaying = false;
+    if (this.songTimeout) {
+      clearTimeout(this.songTimeout);
+      this.songTimeout = null;
+    }
+    this.activeNodes.forEach(node => {
+      try {
+        node.stop();
+        node.disconnect();
+      } catch (e) {}
+    });
+    this.activeNodes = [];
+    this.updateMusicUI(false);
+  }
 
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
+  toggleBirthdaySong() {
+    if (this.isSongPlaying) {
+      this.stopBirthdaySong();
+      if (window.heroBabyAlbum) window.heroBabyAlbum.showToast('⏸️ Birthday Song Paused');
+    } else {
+      this.playHappyBirthdaySong(true);
+      if (window.heroBabyAlbum) window.heroBabyAlbum.showToast('🎶 Playing Happy Birthday Song!');
+    }
+    return this.isSongPlaying;
+  }
 
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.1);
+  updateMusicUI(isPlaying) {
+    const musicBtn = document.getElementById('global-music-toggle');
+    const headerMusicBtn = document.getElementById('header-music-btn');
 
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.1);
+    if (musicBtn) {
+      musicBtn.innerHTML = isPlaying ? "🎶" : "🎵";
+      musicBtn.classList.toggle('playing-pulse', isPlaying);
+    }
+    if (headerMusicBtn) {
+      headerMusicBtn.innerHTML = isPlaying ? "⏸️ Pause Song 🎶" : "🎵 Play Birthday Song";
+      headerMusicBtn.classList.toggle('active-playing', isPlaying);
+    }
   }
 }
 
@@ -2633,7 +2739,6 @@ class BirthdayCakeStage {
   }
 
   startSparklerAnimation() {
-    const flames = document.querySelectorAll('.flame');
     // Live sparkler sparks around active flames
     this.sparkleInterval = setInterval(() => {
       if (this.candlesLit <= 0) return;
@@ -2708,6 +2813,7 @@ class BirthdayCakeStage {
     candles.forEach((c) => {
       c.classList.remove('blown-out');
     });
+
     this.candlesLit = 5;
     window.superAudio.playPowerUp();
 
@@ -2721,8 +2827,8 @@ class BirthdayCakeStage {
   triggerGrandCelebration() {
     window.superAudio.playFanfare();
     setTimeout(() => {
-      window.superAudio.playHappyBirthday();
-    }, 1200);
+      window.superAudio.playHappyBirthdaySong(true);
+    }, 1000);
 
     // Multi-stage firework confetti blast
     if (window.confetti) {
@@ -4022,7 +4128,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* --- main.js --- */
-// High Speed & Instant Responsiveness Engine
+// High Speed & Instant Responsiveness Engine with Happy Birthday Music Player
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Instant Navigation Tab Switching
@@ -4046,7 +4152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 2. Sound Toggle Button
+  // 2. Sound & Happy Birthday Song Controllers
   const soundToggleBtn = document.getElementById('global-sound-toggle');
   if (soundToggleBtn) {
     soundToggleBtn.addEventListener('click', () => {
@@ -4054,6 +4160,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMuted = window.superAudio.toggleMute();
         soundToggleBtn.innerHTML = isMuted ? "🔇" : "🔊";
         if (!isMuted) window.superAudio.playPowerUp();
+      }
+    });
+  }
+
+  const musicToggleBtn = document.getElementById('global-music-toggle');
+  if (musicToggleBtn) {
+    musicToggleBtn.addEventListener('click', () => {
+      if (window.superAudio) {
+        window.superAudio.toggleBirthdaySong();
+      }
+    });
+  }
+
+  const headerMusicBtn = document.getElementById('header-music-btn');
+  if (headerMusicBtn) {
+    headerMusicBtn.addEventListener('click', () => {
+      if (window.superAudio) {
+        window.superAudio.toggleBirthdaySong();
       }
     });
   }
@@ -4097,7 +4221,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', firstUserTouch, { once: true });
   document.addEventListener('touchstart', firstUserTouch, { once: true, passive: true });
 
-  // 7. Initialize Lightweight Sparkle Trail (Idle Auto-Pause)
+  // 7. Initialize Lightweight Sparkle Trail
   initFastSparkleTrail();
 });
 
@@ -4128,7 +4252,7 @@ function initFastSparkleTrail() {
 
   function addParticle(x, y) {
     const now = performance.now();
-    if (now - lastSpawn < 30) return; // 33fps particle throttle
+    if (now - lastSpawn < 30) return;
     lastSpawn = now;
 
     if (particles.length > 20) particles.shift();
@@ -4199,7 +4323,7 @@ function closeShareModal() {
 }
 
 function shareViaWhatsApp() {
-  const text = encodeURIComponent("🎉 You're invited to celebrate our Superhero's 5th Birthday! Check out his interactive 3D Headquarters & Baby Album:");
+  const text = encodeURIComponent("🎉 You're invited to celebrate our Superhero's 5th Birthday! Check out his interactive 3D Headquarters, Baby Album, and Happy Birthday Song:");
   const url = encodeURIComponent(window.location.href);
   window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, '_blank');
 }
@@ -4209,7 +4333,7 @@ async function shareViaNative() {
     try {
       await navigator.share({
         title: "Happy 5th Birthday Superhero!",
-        text: "Celebrate our superhero's 5th Birthday with interactive 3D cake, baby album memories, and games!",
+        text: "Celebrate our superhero's 5th Birthday with interactive 3D cake, baby album memories, and Happy Birthday song!",
         url: window.location.href
       });
     } catch(e) {
@@ -4239,6 +4363,7 @@ function downloadStandaloneCard() {
 }
 
 
-</script>
+  </script>
+
 </body>
 </html>

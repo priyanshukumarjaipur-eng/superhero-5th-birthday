@@ -439,6 +439,36 @@ body {
   transform: scale(1.1);
 }
 
+.music-toggle-btn {
+  background: linear-gradient(135deg, #D97706, #F59E0B);
+  border-color: #FDE047;
+}
+
+.playing-pulse {
+  background: linear-gradient(135deg, #10B981, #059669) !important;
+  border-color: #FDE047 !important;
+  animation: music-btn-beat 0.6s infinite alternate ease-in-out;
+}
+
+.header-music-btn {
+  background: linear-gradient(135deg, #F59E0B, #EA580C);
+  border-color: #FDE047;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-music-btn.active-playing {
+  background: linear-gradient(135deg, #10B981, #047857) !important;
+  border-color: #6EE7B7 !important;
+  color: #fff !important;
+}
+
+@keyframes music-btn-beat {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.12); box-shadow: 0 0 16px rgba(16, 185, 129, 0.7); }
+}
+
 /* Fast Toast Message */
 .super-site-toast {
   position: fixed;

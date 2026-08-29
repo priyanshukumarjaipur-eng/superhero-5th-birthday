@@ -23,7 +23,6 @@ class BirthdayCakeStage {
   }
 
   startSparklerAnimation() {
-    const flames = document.querySelectorAll('.flame');
     // Live sparkler sparks around active flames
     this.sparkleInterval = setInterval(() => {
       if (this.candlesLit <= 0) return;
@@ -98,6 +97,7 @@ class BirthdayCakeStage {
     candles.forEach((c) => {
       c.classList.remove('blown-out');
     });
+
     this.candlesLit = 5;
     window.superAudio.playPowerUp();
 
@@ -111,8 +111,8 @@ class BirthdayCakeStage {
   triggerGrandCelebration() {
     window.superAudio.playFanfare();
     setTimeout(() => {
-      window.superAudio.playHappyBirthday();
-    }, 1200);
+      window.superAudio.playHappyBirthdaySong(true);
+    }, 1000);
 
     // Multi-stage firework confetti blast
     if (window.confetti) {

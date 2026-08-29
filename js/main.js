@@ -1,4 +1,4 @@
-// High Speed & Instant Responsiveness Engine
+// High Speed & Instant Responsiveness Engine with Happy Birthday Music Player
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Instant Navigation Tab Switching
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 2. Sound Toggle Button
+  // 2. Sound & Happy Birthday Song Controllers
   const soundToggleBtn = document.getElementById('global-sound-toggle');
   if (soundToggleBtn) {
     soundToggleBtn.addEventListener('click', () => {
@@ -30,6 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const isMuted = window.superAudio.toggleMute();
         soundToggleBtn.innerHTML = isMuted ? "🔇" : "🔊";
         if (!isMuted) window.superAudio.playPowerUp();
+      }
+    });
+  }
+
+  const musicToggleBtn = document.getElementById('global-music-toggle');
+  if (musicToggleBtn) {
+    musicToggleBtn.addEventListener('click', () => {
+      if (window.superAudio) {
+        window.superAudio.toggleBirthdaySong();
+      }
+    });
+  }
+
+  const headerMusicBtn = document.getElementById('header-music-btn');
+  if (headerMusicBtn) {
+    headerMusicBtn.addEventListener('click', () => {
+      if (window.superAudio) {
+        window.superAudio.toggleBirthdaySong();
       }
     });
   }
@@ -73,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', firstUserTouch, { once: true });
   document.addEventListener('touchstart', firstUserTouch, { once: true, passive: true });
 
-  // 7. Initialize Lightweight Sparkle Trail (Idle Auto-Pause)
+  // 7. Initialize Lightweight Sparkle Trail
   initFastSparkleTrail();
 });
 
@@ -104,7 +122,7 @@ function initFastSparkleTrail() {
 
   function addParticle(x, y) {
     const now = performance.now();
-    if (now - lastSpawn < 30) return; // 33fps particle throttle
+    if (now - lastSpawn < 30) return;
     lastSpawn = now;
 
     if (particles.length > 20) particles.shift();
