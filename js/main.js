@@ -1,4 +1,4 @@
-// High Speed & Instant Responsiveness Engine with Happy Birthday Music Player
+// High Speed Responsiveness Engine with Always-Playing Continuous Happy Birthday Music
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Instant Navigation Tab Switching
@@ -79,17 +79,34 @@ document.addEventListener('DOMContentLoaded', () => {
     window.superScene3D.init();
   }
 
-  // 6. Initialize Web Audio on first user interaction
-  const firstUserTouch = () => {
+  // 6. ALWAYS-PLAYING HAPPY BIRTHDAY SONG ENGINE (Autoplay + First Interaction Fallback)
+  function startAlwaysPlayingSong() {
     if (window.superAudio) {
       window.superAudio.init();
       window.superAudio.resume();
+      if (!window.superAudio.isSongPlaying && !window.superAudio.muted) {
+        window.superAudio.playHappyBirthdaySong(true);
+      }
     }
-    document.removeEventListener('click', firstUserTouch);
-    document.removeEventListener('touchstart', firstUserTouch);
+  }
+
+  // Try immediate autoplay
+  try {
+    startAlwaysPlayingSong();
+  } catch(e) {}
+
+  // Autoplay on first user touch/click/scroll (Satisfies iOS/Android/Chrome user-gesture policy)
+  const triggerAutoPlay = () => {
+    startAlwaysPlayingSong();
+    document.removeEventListener('click', triggerAutoPlay);
+    document.removeEventListener('touchstart', triggerAutoPlay);
+    document.removeEventListener('pointerdown', triggerAutoPlay);
+    document.removeEventListener('keydown', triggerAutoPlay);
   };
-  document.addEventListener('click', firstUserTouch, { once: true });
-  document.addEventListener('touchstart', firstUserTouch, { once: true, passive: true });
+  document.addEventListener('click', triggerAutoPlay);
+  document.addEventListener('touchstart', triggerAutoPlay, { passive: true });
+  document.addEventListener('pointerdown', triggerAutoPlay, { passive: true });
+  document.addEventListener('keydown', triggerAutoPlay);
 
   // 7. Initialize Lightweight Sparkle Trail
   initFastSparkleTrail();

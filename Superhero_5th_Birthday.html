@@ -2087,7 +2087,7 @@ body {
 
 
 /* --- audio.js --- */
-// Web Audio API Synthesizer & Full Happy Birthday Song Orchestrator
+// Web Audio API Synthesizer & Continuous Happy Birthday Background Music Engine
 class SuperheroAudio {
   constructor() {
     this.ctx = null;
@@ -2119,6 +2119,8 @@ class SuperheroAudio {
     this.muted = !this.muted;
     if (this.muted && this.isSongPlaying) {
       this.stopBirthdaySong();
+    } else if (!this.muted && !this.isSongPlaying) {
+      this.playHappyBirthdaySong(true);
     }
     return this.muted;
   }
@@ -2137,7 +2139,7 @@ class SuperheroAudio {
     osc.frequency.setValueAtTime(880, this.ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.18);
 
-    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.18);
 
     osc.connect(gain);
@@ -2262,7 +2264,7 @@ class SuperheroAudio {
     osc.frequency.setValueAtTime(600, this.ctx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.1);
 
-    gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
 
     osc.connect(gain);
@@ -2306,7 +2308,7 @@ class SuperheroAudio {
   }
 
   /* =========================================================
-     FULL ORCHESTRATED HAPPY BIRTHDAY SONG WITH HARMONY
+     CONTINUOUS ALWAYS-PLAYING HAPPY BIRTHDAY SONG
      ========================================================= */
   playHappyBirthdaySong(loop = true) {
     if (this.muted) return;
@@ -2314,7 +2316,19 @@ class SuperheroAudio {
     this.resume();
     if (!this.ctx) return;
 
-    this.stopBirthdaySong();
+    // Clear any existing active notes
+    if (this.songTimeout) {
+      clearTimeout(this.songTimeout);
+      this.songTimeout = null;
+    }
+    this.activeNodes.forEach(node => {
+      try {
+        node.stop();
+        node.disconnect();
+      } catch (e) {}
+    });
+    this.activeNodes = [];
+
     this.isSongPlaying = true;
     this.updateMusicUI(true);
 
@@ -2322,7 +2336,6 @@ class SuperheroAudio {
     const tempo = 0.52; // Beat duration in seconds
 
     // Full Happy Birthday Melody Notes & Beats:
-    // [Note, Octave, Duration in beats, Start Beat, Chord Base]
     const songScore = [
       // Phrase 1: "Happy Birthday to you"
       { f: 392.00, beat: 0, dur: 0.75 },     // G4 (Hap-)
@@ -2330,7 +2343,7 @@ class SuperheroAudio {
       { f: 440.00, beat: 1.0, dur: 1.0 },    // A4 (Birth-)
       { f: 392.00, beat: 2.0, dur: 1.0 },    // G4 (-day)
       { f: 523.25, beat: 3.0, dur: 1.0 },    // C5 (to)
-      { f: 493.88, beat: 4.0, dur: 2.0 },    // B4 (you!)
+      { f: 493.88, beat: 4.0, dur: 1.8 },    // B4 (you!)
       
       // Phrase 2: "Happy Birthday to you"
       { f: 392.00, beat: 6.0, dur: 0.75 },   // G4 (Hap-)
@@ -2338,7 +2351,7 @@ class SuperheroAudio {
       { f: 440.00, beat: 7.0, dur: 1.0 },    // A4 (Birth-)
       { f: 392.00, beat: 8.0, dur: 1.0 },    // G4 (-day)
       { f: 587.33, beat: 9.0, dur: 1.0 },    // D5 (to)
-      { f: 523.25, beat: 10.0, dur: 2.0 },   // C5 (you!)
+      { f: 523.25, beat: 10.0, dur: 1.8 },   // C5 (you!)
 
       // Phrase 3: "Happy Birthday dear Superhero"
       { f: 392.00, beat: 12.0, dur: 0.75 },  // G4 (Hap-)
@@ -2347,7 +2360,7 @@ class SuperheroAudio {
       { f: 659.25, beat: 14.0, dur: 1.0 },   // E5 (-day)
       { f: 523.25, beat: 15.0, dur: 1.0 },   // C5 (dear)
       { f: 493.88, beat: 16.0, dur: 1.0 },   // B4 (Su-)
-      { f: 440.00, beat: 17.0, dur: 1.5 },   // A4 (-perhero!)
+      { f: 440.00, beat: 17.0, dur: 1.4 },   // A4 (-perhero!)
 
       // Phrase 4: "Happy Birthday to you!"
       { f: 698.46, beat: 18.5, dur: 0.75 },  // F5 (Hap-)
@@ -2355,17 +2368,17 @@ class SuperheroAudio {
       { f: 659.25, beat: 19.5, dur: 1.0 },   // E5 (Birth-)
       { f: 523.25, beat: 20.5, dur: 1.0 },   // C5 (-day)
       { f: 587.33, beat: 21.5, dur: 1.0 },   // D5 (to)
-      { f: 523.25, beat: 22.5, dur: 2.5 }    // C5 (you-u-u!)
+      { f: 523.25, beat: 22.5, dur: 2.2 }    // C5 (you-u-u!)
     ];
 
-    // Rich Harmony Chords (Warm Bass Bells)
+    // Harmony Chords
     const chords = [
-      { f: 130.81, beat: 0, dur: 5.5 },   // C3 Chord Base
-      { f: 196.00, beat: 6, dur: 5.5 },   // G3 Chord Base
-      { f: 130.81, beat: 12, dur: 5.5 },  // C3 Chord Base
-      { f: 174.61, beat: 18, dur: 3.0 },  // F3 Chord Base
-      { f: 196.00, beat: 21, dur: 1.5 },  // G3 Chord Base
-      { f: 130.81, beat: 22.5, dur: 3.0 } // C3 Final Chord
+      { f: 130.81, beat: 0, dur: 5.5 },   // C3
+      { f: 196.00, beat: 6, dur: 5.5 },   // G3
+      { f: 130.81, beat: 12, dur: 5.5 },  // C3
+      { f: 174.61, beat: 18, dur: 3.0 },  // F3
+      { f: 196.00, beat: 21, dur: 1.5 },  // G3
+      { f: 130.81, beat: 22.5, dur: 2.5 } // C3
     ];
 
     // Play Main Melody with Warm Music-Box Chime Tone
@@ -2373,14 +2386,13 @@ class SuperheroAudio {
       const startTime = now + note.beat * tempo;
       const duration = note.dur * tempo;
 
-      // Primary Chime
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(note.f, startTime);
 
       gain.gain.setValueAtTime(0.001, startTime);
-      gain.gain.linearRampToValueAtTime(0.22, startTime + 0.03);
+      gain.gain.linearRampToValueAtTime(0.20, startTime + 0.03);
       gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
       osc.connect(gain);
@@ -2388,15 +2400,15 @@ class SuperheroAudio {
       osc.start(startTime);
       osc.stop(startTime + duration + 0.05);
 
-      // Sparkle Harmonic Bell Overtone
+      // Bell Overtone
       const bellOsc = this.ctx.createOscillator();
       const bellGain = this.ctx.createGain();
       bellOsc.type = 'sine';
       bellOsc.frequency.setValueAtTime(note.f * 2, startTime);
 
       bellGain.gain.setValueAtTime(0.001, startTime);
-      bellGain.gain.linearRampToValueAtTime(0.08, startTime + 0.02);
-      bellGain.gain.exponentialRampToValueAtTime(0.001, startTime + Math.min(duration, 0.4));
+      bellGain.gain.linearRampToValueAtTime(0.06, startTime + 0.02);
+      bellGain.gain.exponentialRampToValueAtTime(0.001, startTime + Math.min(duration, 0.35));
 
       bellOsc.connect(bellGain);
       bellGain.connect(this.ctx.destination);
@@ -2406,7 +2418,7 @@ class SuperheroAudio {
       this.activeNodes.push(osc, bellOsc);
     });
 
-    // Play Warm Bass Accompaniment
+    // Play Bass Chords
     chords.forEach(ch => {
       const startTime = now + ch.beat * tempo;
       const duration = ch.dur * tempo;
@@ -2417,7 +2429,7 @@ class SuperheroAudio {
       bassOsc.frequency.setValueAtTime(ch.f, startTime);
 
       bassGain.gain.setValueAtTime(0.001, startTime);
-      bassGain.gain.linearRampToValueAtTime(0.12, startTime + 0.1);
+      bassGain.gain.linearRampToValueAtTime(0.10, startTime + 0.1);
       bassGain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
 
       bassOsc.connect(bassGain);
@@ -2428,9 +2440,9 @@ class SuperheroAudio {
       this.activeNodes.push(bassOsc);
     });
 
-    const totalSongDurationMs = (25.5 * tempo * 1000);
+    const totalSongDurationMs = (25.0 * tempo * 1000) + 800;
 
-    // Loop Song if enabled
+    // Endless Loop
     if (loop) {
       this.songTimeout = setTimeout(() => {
         if (this.isSongPlaying && !this.muted) {
@@ -2462,7 +2474,7 @@ class SuperheroAudio {
       if (window.heroBabyAlbum) window.heroBabyAlbum.showToast('⏸️ Birthday Song Paused');
     } else {
       this.playHappyBirthdaySong(true);
-      if (window.heroBabyAlbum) window.heroBabyAlbum.showToast('🎶 Playing Happy Birthday Song!');
+      if (window.heroBabyAlbum) window.heroBabyAlbum.showToast('🎶 Birthday Song Playing!');
     }
     return this.isSongPlaying;
   }
@@ -2476,7 +2488,7 @@ class SuperheroAudio {
       musicBtn.classList.toggle('playing-pulse', isPlaying);
     }
     if (headerMusicBtn) {
-      headerMusicBtn.innerHTML = isPlaying ? "⏸️ Pause Song 🎶" : "🎵 Play Birthday Song";
+      headerMusicBtn.innerHTML = isPlaying ? "⏸️ Birthday Song Playing 🎶" : "🎵 Play Birthday Song";
       headerMusicBtn.classList.toggle('active-playing', isPlaying);
     }
   }
@@ -4128,7 +4140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* --- main.js --- */
-// High Speed & Instant Responsiveness Engine with Happy Birthday Music Player
+// High Speed Responsiveness Engine with Always-Playing Continuous Happy Birthday Music
 document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Instant Navigation Tab Switching
@@ -4209,17 +4221,34 @@ document.addEventListener('DOMContentLoaded', () => {
     window.superScene3D.init();
   }
 
-  // 6. Initialize Web Audio on first user interaction
-  const firstUserTouch = () => {
+  // 6. ALWAYS-PLAYING HAPPY BIRTHDAY SONG ENGINE (Autoplay + First Interaction Fallback)
+  function startAlwaysPlayingSong() {
     if (window.superAudio) {
       window.superAudio.init();
       window.superAudio.resume();
+      if (!window.superAudio.isSongPlaying && !window.superAudio.muted) {
+        window.superAudio.playHappyBirthdaySong(true);
+      }
     }
-    document.removeEventListener('click', firstUserTouch);
-    document.removeEventListener('touchstart', firstUserTouch);
+  }
+
+  // Try immediate autoplay
+  try {
+    startAlwaysPlayingSong();
+  } catch(e) {}
+
+  // Autoplay on first user touch/click/scroll (Satisfies iOS/Android/Chrome user-gesture policy)
+  const triggerAutoPlay = () => {
+    startAlwaysPlayingSong();
+    document.removeEventListener('click', triggerAutoPlay);
+    document.removeEventListener('touchstart', triggerAutoPlay);
+    document.removeEventListener('pointerdown', triggerAutoPlay);
+    document.removeEventListener('keydown', triggerAutoPlay);
   };
-  document.addEventListener('click', firstUserTouch, { once: true });
-  document.addEventListener('touchstart', firstUserTouch, { once: true, passive: true });
+  document.addEventListener('click', triggerAutoPlay);
+  document.addEventListener('touchstart', triggerAutoPlay, { passive: true });
+  document.addEventListener('pointerdown', triggerAutoPlay, { passive: true });
+  document.addEventListener('keydown', triggerAutoPlay);
 
   // 7. Initialize Lightweight Sparkle Trail
   initFastSparkleTrail();
