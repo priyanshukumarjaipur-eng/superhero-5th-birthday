@@ -1428,12 +1428,8 @@ body {
         </div>
       </div>
 
-      <!-- Quick Actions & Music & Background Controller -->
+      <!-- Quick Actions & Background Controller -->
       <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-        <button id="header-music-btn" class="hero-btn header-music-btn" title="Play Happy Birthday Song!">
-          🎵 Play Birthday Song
-        </button>
-
         <div class="bg-controls-bar" title="Switch Website Background Photo">
           <span class="bg-controls-label">🖼️ PHOTO:</span>
           <button class="bg-switcher-btn active" data-bg-key="img1" title="Prince Archer (Today)">🏹 Archer</button>
@@ -1489,10 +1485,10 @@ body {
         </p>
         
         <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom:25px;">
-          <button onclick="window.superAudio.toggleBirthdaySong()" class="hero-btn btn-gold" style="font-size:18px; padding:14px 28px;">🎶 Play Birthday Song</button>
-          <button onclick="document.querySelector('[data-tab=tab-album]').click()" class="hero-btn btn-primary" style="font-size:18px; padding:14px 28px;">🍼 Baby Album (9)</button>
-          <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-accent" style="font-size:18px; padding:14px 28px;">🎂 Blow 5 Candles</button>
-          <button onclick="document.querySelector('[data-tab=tab-games]').click()" class="hero-btn btn-purple" style="font-size:18px; padding:14px 28px;">🎮 Play Mini-Games</button>
+          <button onclick="document.querySelector('[data-tab=tab-album]').click()" class="hero-btn btn-gold" style="font-size:18px; padding:14px 28px;">🍼 Baby Album (9)</button>
+          <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-primary" style="font-size:18px; padding:14px 28px;">🎂 Blow 5 Candles</button>
+          <button onclick="document.querySelector('[data-tab=tab-games]').click()" class="hero-btn btn-accent" style="font-size:18px; padding:14px 28px;">🎮 Play Mini-Games</button>
+          <button onclick="document.querySelector('[data-tab=tab-card]').click()" class="hero-btn btn-purple" style="font-size:18px; padding:14px 28px;">💌 Open 3D Card</button>
         </div>
 
         <!-- Super Hero Stats Grid -->
@@ -1531,7 +1527,7 @@ body {
           <div>
             <div class="game-icon-large">🎂</div>
             <h3 style="font-family:var(--font-hero); font-size:20px; color:#FDE047;">Interactive 3D Cake</h3>
-            <p style="color:#CBD5E1; margin:10px 0;">Click or blow out all 5 glowing candles to unlock live sparklers, fireworks, and the Happy Birthday Song!</p>
+            <p style="color:#CBD5E1; margin:10px 0;">Click or blow out all 5 glowing candles to unlock live sparklers, fireworks, and celebration fanfare!</p>
           </div>
           <button onclick="document.querySelector('[data-tab=tab-cake]').click()" class="hero-btn btn-gold" style="margin-top:14px;">Go to Cake ➔</button>
         </div>
@@ -1864,10 +1860,6 @@ body {
             <span class="sound-btn-icon">🎺</span>
             <span class="sound-btn-label">FANFARE</span>
           </div>
-          <div class="sound-btn soundboard-btn" data-sound="birthday">
-            <span class="sound-btn-icon">🎂</span>
-            <span class="sound-btn-label">BIRTHDAY SONG</span>
-          </div>
           <div class="sound-btn soundboard-btn" data-sound="robot">
             <span class="sound-btn-icon">🤖</span>
             <span class="sound-btn-label">ROBOT BEEP</span>
@@ -1981,9 +1973,6 @@ body {
       <div class="slideshow-caption-box">
         <h4 id="slideshow-title" style="font-family:var(--font-hero); font-size:22px; color:#FDE047; margin-bottom:6px;">Title</h4>
         <p id="slideshow-desc" style="color:#CBD5E1; font-size:16px; margin-bottom:14px;">Description</p>
-        <div style="display:flex; justify-content:center; gap:12px;">
-          <button id="slideshow-play-pause" class="hero-btn btn-gold" style="font-size:14px; padding:8px 18px;">⏸️ Pause</button>
-        </div>
       </div>
     </div>
   </div>
@@ -2034,7 +2023,7 @@ body {
         SHARE BIRTHDAY WEBSITE
       </h3>
       <p style="color:#CBD5E1; font-size:15px; margin-bottom:20px; line-height:1.5;">
-        Send this interactive Superhero Birthday Card, Happy Birthday Song & Baby Album to family and friends!
+        Send this interactive Superhero Birthday Card & Baby Album to family and friends!
       </p>
 
       <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px;">
@@ -2058,10 +2047,9 @@ body {
     </div>
   </div>
 
-  <!-- Floating Audio & Music Toggle Buttons -->
+  <!-- Floating Audio Mute Toggle Button -->
   <div class="sound-toggle-bar">
-    <button id="global-music-toggle" class="sound-toggle-btn music-toggle-btn" title="Toggle Happy Birthday Song">🎵</button>
-    <button id="global-sound-toggle" class="sound-toggle-btn" title="Toggle Sound FX">🔊</button>
+    <button id="global-sound-toggle" class="sound-toggle-btn" title="Toggle Sound">🔊</button>
   </div>
 
   <!-- External Libraries -->
@@ -4352,7 +4340,7 @@ function closeShareModal() {
 }
 
 function shareViaWhatsApp() {
-  const text = encodeURIComponent("🎉 You're invited to celebrate our Superhero's 5th Birthday! Check out his interactive 3D Headquarters, Baby Album, and Happy Birthday Song:");
+  const text = encodeURIComponent("🎉 You're invited to celebrate our Superhero's 5th Birthday! Check out his interactive 3D Headquarters, Baby Album, and Happy Birthday Celebration:");
   const url = encodeURIComponent(window.location.href);
   window.open(`https://api.whatsapp.com/send?text=${text}%20${url}`, '_blank');
 }
@@ -4362,7 +4350,7 @@ async function shareViaNative() {
     try {
       await navigator.share({
         title: "Happy 5th Birthday Superhero!",
-        text: "Celebrate our superhero's 5th Birthday with interactive 3D cake, baby album memories, and Happy Birthday song!",
+        text: "Celebrate our superhero's 5th Birthday with interactive 3D cake, baby album memories, and Happy Birthday music!",
         url: window.location.href
       });
     } catch(e) {
